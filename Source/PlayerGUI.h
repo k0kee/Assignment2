@@ -24,6 +24,7 @@ private:
     juce::TextButton loadButton{ "Load File" };
     juce::TextButton restartButton{ "Restart" };
     juce::TextButton stopButton{ "Stop" };
+    juce::TextButton muteButton{"Mute"};
     juce::ImageButton playAndPause;
     juce::Image playImage;
     juce::Image pauseImage;

@@ -72,6 +72,16 @@ double PlayerAudio::getLength() const
 {
     return transportSource.getLengthInSeconds();
 }
+void PlayerAudio::toggleMute(){
+    if(!muted){
+        prev=transportSource.getGain();
+        setGain(0.0f);
+        muted=true;
+    }else{
+        setGain(prev);
+        muted=false;
+    }
+}
 
 
 
