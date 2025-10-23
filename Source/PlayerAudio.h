@@ -19,6 +19,7 @@ public:
     double getPosition() const;
     double getLength() const;
 
+
 private:
     juce::AudioFormatManager formatManager;
     std::unique_ptr<juce::AudioFormatReaderSource> readerSource;
