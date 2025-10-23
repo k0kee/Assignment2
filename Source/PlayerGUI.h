@@ -1,4 +1,4 @@
-#pragma once                        // PlayerGUI.h
+#pragma once
 #include <JuceHeader.h>
 #include "PlayerAudio.h"
 
@@ -11,34 +11,29 @@ public:
     ~PlayerGUI() override;
 
     void resized() override;
+    void paint(juce::Graphics& g) override;
 
     void prepareToPlay(int samplesPerBlockExpected, double sampleRate);
     void getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToFill);
     void releaseResources();
-    void paint(juce::Graphics& g) override; 
 
 private:
     PlayerAudio playerAudio;
 
-    // GUI elements
+    
     juce::TextButton loadButton{ "Load File" };
     juce::TextButton restartButton{ "Restart" };
     juce::TextButton stopButton{ "Stop" };
+    juce::TextButton playButton{ "Play" };
+    juce::TextButton pauseButton{ "Pause" };
+    juce::TextButton previousButton{ "Previous" };
+    juce::TextButton nextButton{ "Next" };
     juce::TextButton muteButton{"Mute"};
-    juce::ImageButton playAndPause;
-    juce::Image playImage;
-    juce::Image pauseImage;
-    juce::ImageButton next;
-    juce::Image nextImage;
-    juce::ImageButton previous;
-    juce::Image previousImage;
-    bool isPlaying;
 
     juce::Slider volumeSlider;
-
     std::unique_ptr<juce::FileChooser> fileChooser;
 
-    // Event handlers
+
     void buttonClicked(juce::Button* button) override;
     void sliderValueChanged(juce::Slider* slider) override;
 

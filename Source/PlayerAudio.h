@@ -1,4 +1,4 @@
-#pragma once                            // PlayerAudio.h
+#pragma once
 #include <JuceHeader.h>
 
 class PlayerAudio
@@ -19,7 +19,6 @@ public:
     double getPosition() const;
     double getLength() const;
     void toggleMute();
-
 
 private:
     juce::AudioFormatManager formatManager;

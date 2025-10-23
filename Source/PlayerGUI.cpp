@@ -2,56 +2,22 @@
 
 PlayerGUI::PlayerGUI()
 {
-    // Add buttons
-   for (auto* btn : { &loadButton &restartButton, &stopButton, &muteButton })
+    
+    for (auto* btn : { &loadButton, &restartButton, &stopButton, &previousButton, &playButton, &pauseButton, &nextButton,&muteButton })
     {
         btn->addListener(this);
         addAndMakeVisible(btn);
     }
 
-   nextImage = juce::ImageFileFormat::loadFrom(BinaryData::next_png,BinaryData::next_pngSize);
-   next.setImages(false, true, true,
-       nextImage, 1.0f, juce::Colours::transparentBlack,
-       nextImage, 1.0f, juce::Colours::white.withAlpha(0.3f),
-       nextImage, 1.0f, juce::Colours::white.withAlpha(0.6f)
-   );
 
-   next.addListener(this);
-   addAndMakeVisible(next);
-
-   previousImage = juce::ImageFileFormat::loadFrom(BinaryData::previous_png, BinaryData::previous_pngSize);
-   previous.setImages(false, true, true,
-       previousImage, 1.0f, juce::Colours::transparentBlack,
-       previousImage, 1.0f, juce::Colours::white.withAlpha(0.3f),
-       previousImage, 1.0f, juce::Colours::white.withAlpha(0.6f)
-   );
-
-   previous.addListener(this);
-   addAndMakeVisible(previous);
-
-
-   playImage = juce::ImageFileFormat::loadFrom(BinaryData::play_png, BinaryData::play_pngSize);
-   pauseImage = juce::ImageFileFormat::loadFrom(BinaryData::pause_png, BinaryData::pause_pngSize);
-   playAndPause.setImages(false, true, true,
-       playImage, 1.0f, juce::Colours::transparentBlack,
-       playImage, 1.0f, juce::Colours::black.withAlpha(0.3f),
-       pauseImage, 1.0f, juce::Colours::transparentBlack
-       );
-
-   playAndPause.addListener(this);
-   addAndMakeVisible(playAndPause);
-
-    // Volume slider
     volumeSlider.setRange(0.0, 1.0, 0.01);
     volumeSlider.setValue(0.5);
     volumeSlider.addListener(this);
     addAndMakeVisible(volumeSlider);
 }
 
-PlayerGUI::~PlayerGUI()
-{
+PlayerGUI::~PlayerGUI() {}
 
-}
 void PlayerGUI::prepareToPlay(int samplesPerBlockExpected, double sampleRate)
 {
     playerAudio.prepareToPlay(samplesPerBlockExpected, sampleRate);
@@ -70,25 +36,42 @@ void PlayerGUI::paint(juce::Graphics& g)
 {
     g.fillAll(juce::Colours::darkgrey);
 }
+
 void PlayerGUI::resized()
 {
-    int y = 20;
-    loadButton.setBounds(20, y, 60, 20);
-    playAndPause.setBounds(140, y, 20, 20);
-    next.setBounds(180, y, 20, 20);
-    previous.setBounds(100, y, 20, 20);
-    muteButton.setBounds(340,y,80,40);
+    int buttonWidth = 80;
+    int buttonHeight = 40;
+    int spacing = 10;
+    int totalButtons = 7;
+    int totalWidth = (buttonWidth * totalButtons) + (spacing * (totalButtons - 1));
+    int startX = (getWidth() - totalWidth) / 2;
+    int y = 30;
+    int x = startX;
+
     
-    volumeSlider.setBounds(20, 100, getWidth() - 40, 30);
+    loadButton.setBounds(x, y, buttonWidth, buttonHeight);
+    x += buttonWidth + spacing;
+    restartButton.setBounds(x, y, buttonWidth, buttonHeight);
+    x += buttonWidth + spacing;
+    stopButton.setBounds(x, y, buttonWidth, buttonHeight);
+    x += buttonWidth + spacing;
+    previousButton.setBounds(x, y, buttonWidth, buttonHeight);
+    x += buttonWidth + spacing;
+    playButton.setBounds(x, y, buttonWidth, buttonHeight);
+    x += buttonWidth + spacing;
+    pauseButton.setBounds(x, y, buttonWidth, buttonHeight);
+    x += buttonWidth + spacing;
+    nextButton.setBounds(x, y, buttonWidth, buttonHeight);
+    x += buttonWidth + spacing;
+    muteButton.setBounds(x,y,buttonWidth,buttonHeight);
+ 
+    volumeSlider.setBounds(40, y + 70, getWidth() - 80, 30);
 }
+
 void PlayerGUI::buttonClicked(juce::Button* button)
 {
     if (button == &loadButton)
     {
-        juce::FileChooser chooser("Select audio files...",
-            juce::File{},
-            "*.wav;*.mp3");
-
         fileChooser = std::make_unique<juce::FileChooser>(
             "Select an audio file...",
             juce::File{},
@@ -102,53 +85,47 @@ void PlayerGUI::buttonClicked(juce::Button* button)
                 if (file.existsAsFile())
                 {
                     playerAudio.loadFile(file);
-                    playAndPause.setImages(false, true, true,
-                        pauseImage, 1.0f, juce::Colours::transparentBlack,
-                        pauseImage, 1.0f, juce::Colours::black.withAlpha(0.3f),
-                        playImage, 1.0f, juce::Colours::transparentBlack
-                    );
                 }
             });
     }
 
-    if (button == &playAndPause)
-   {
-        if (!isPlaying)
-        {
-            playerAudio.start();
-            playAndPause.setImages(false, true, true,
-                pauseImage, 1.0f, juce::Colours::transparentBlack,
-                pauseImage, 1.0f, juce::Colours::black.withAlpha(0.3f),
-                playImage, 1.0f, juce::Colours::transparentBlack
-            );
-            isPlaying = true;
-         
-        }
-        else
-        {
-            playerAudio.stop();
-            playAndPause.setImages(false, true, true,
-                playImage, 1.0f, juce::Colours::transparentBlack,
-                playImage, 1.0f, juce::Colours::black.withAlpha(0.3f),
-                pauseImage, 1.0f, juce::Colours::transparentBlack
-            );
-            isPlaying = false;
-        }
-   }
-    if (button == &previous)
+    if (button == &restartButton)
+    {
+        playerAudio.stop();
+        playerAudio.setPosition(0.0);
+        playerAudio.start();
+    }
+
+    if (button == &stopButton)
+    {
+        playerAudio.stop();
+        playerAudio.setPosition(0.0);
+    }
+
+    if (button == &playButton)
+    {
+        playerAudio.start();
+    }
+
+    if (button == &pauseButton)
+    {
+        playerAudio.stop();
+    }
+
+    if (button == &previousButton)
     {
         playerAudio.setPosition(0.0);
     }
-    if (button == &next)
+
+    if (button == &nextButton)
     {
-
-        playerAudio.setPosition(playerAudio.getPosition());
-
+        playerAudio.setPosition(playerAudio.getLength());
     }
     if(button==&muteButton){
     playerAudio.toggleMute();
     }
 }
+
 void PlayerGUI::sliderValueChanged(juce::Slider* slider)
 {
     if (slider == &volumeSlider)
@@ -156,7 +133,3 @@ void PlayerGUI::sliderValueChanged(juce::Slider* slider)
         playerAudio.setGain((float)slider->getValue());
     }
 }
-
-
-
-
