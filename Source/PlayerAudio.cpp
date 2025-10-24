@@ -5,7 +5,9 @@ PlayerAudio::PlayerAudio()
     formatManager.registerBasicFormats();
 }
 
-PlayerAudio::~PlayerAudio() {}
+PlayerAudio::~PlayerAudio()
+{
+}
 
 void PlayerAudio::prepareToPlay(int samplesPerBlockExpected, double sampleRate)
 {
@@ -15,6 +17,13 @@ void PlayerAudio::prepareToPlay(int samplesPerBlockExpected, double sampleRate)
 void PlayerAudio::getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToFill)
 {
     transportSource.getNextAudioBlock(bufferToFill);
+
+   
+    if (isLooping && transportSource.hasStreamFinished())
+    {
+        transportSource.setPosition(0.0);
+        transportSource.start();
+    }
 }
 
 void PlayerAudio::releaseResources()
@@ -33,11 +42,16 @@ bool PlayerAudio::loadFile(const juce::File& file)
             readerSource.reset();
 
             readerSource = std::make_unique<juce::AudioFormatReaderSource>(reader, true);
-			readerSource->setLooping(isLooping);
-            transportSource.setSource(readerSource.get(), 0, nullptr, reader->sampleRate);
+
+            transportSource.setSource(readerSource.get(),
+                0,
+                nullptr,
+                reader->sampleRate);
+
+            return true;
         }
     }
-    return true;
+    return false;
 }
 
 void PlayerAudio::start()
@@ -53,6 +67,7 @@ void PlayerAudio::stop()
 void PlayerAudio::setGain(float gain)
 {
     transportSource.setGain(gain);
+    prev = gain; 
 }
 
 void PlayerAudio::setPosition(double pos)
@@ -69,20 +84,25 @@ double PlayerAudio::getLength() const
 {
     return transportSource.getLengthInSeconds();
 }
-void PlayerAudio::toggleMute(){
-    if(!muted){
-        prev=transportSource.getGain();
-        setGain(0.0f);
-        muted=true;
-    }else{
-        setGain(prev);
-        muted=false;
+
+void PlayerAudio::toggleMute()
+{
+    if (muted)
+    {
+        transportSource.setGain(prev); 
+        muted = false;
+    }
+    else
+    {
+        prev = transportSource.getGain(); 
+        transportSource.setGain(0.0f);    
+        muted = true;
     }
 }
-void PlayerAudio::setLooping(bool shouldLoop) 
+
+void PlayerAudio::setLooping(bool shouldLoop)
 {
     isLooping = shouldLoop;
-    if (readerSource)
-        readerSource->setLooping(isLooping);
+    if (readerSource.get())
+        readerSource->setLooping(shouldLoop);
 }
-bool PlayerAudio::getLooping() const { return isLooping; }
