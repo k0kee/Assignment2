@@ -3,9 +3,8 @@
 #include "PlayerAudio.h"
 
 class PlayerGUI : public juce::Component,
-                  public juce::Button::Listener,
-                  public juce::Slider::Listener,
-                  public juce::Timer
+    public juce::Button::Listener,
+    public juce::Slider::Listener
 {
 public:
     PlayerGUI();
@@ -36,9 +35,6 @@ private:
     
     juce::Slider volumeSlider;
     juce::Slider speedSlider;
-    juce::Slider progressSlider;
-    juce::Label currentTimeLabel, totalTimeLabel;
-
 
 
     std::unique_ptr<juce::FileChooser> fileChooser;
@@ -46,6 +42,8 @@ private:
     
     void buttonClicked(juce::Button* button) override;
     void sliderValueChanged(juce::Slider* slider) override;
+    void timerCallback() override;
+
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PlayerGUI)
 };

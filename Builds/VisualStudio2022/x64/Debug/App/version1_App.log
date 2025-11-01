@@ -1,2 +1,72 @@
 ﻿  PlayerGUI.cpp
-  version1_App.vcxproj -> C:\Assignment oop 2\testtttttt\Assignment2\Builds\VisualStudio2022\x64\Debug\App\version1.exe
+  Main.cpp
+  MainComponent.cpp
+C:\Assignment oop 2\testtttttt\Assignment2\Source\PlayerGUI.h(10,5): error C2143: syntax error: missing ',' before 'public'
+  (compiling source file '../../Source/MainComponent.cpp')
+  
+C:\Assignment oop 2\testtttttt\Assignment2\Source\PlayerGUI.h(6,40): error C2500: 'PlayerGUI': 'juce::Button::Listener' is already a direct base class
+  (compiling source file '../../Source/MainComponent.cpp')
+      C:\JUCE\modules\juce_gui_basics\buttons\juce_Button.h(197,21):
+      see declaration of 'juce::Button::Listener'
+  
+C:\Assignment oop 2\testtttttt\Assignment2\Source\PlayerGUI.h(7,40): error C2500: 'PlayerGUI': 'juce::SliderListener<juce::Slider>' is already a direct base class
+  (compiling source file '../../Source/MainComponent.cpp')
+      C:\JUCE\modules\juce_gui_basics\widgets\juce_Slider.h(49,17):
+      see declaration of 'juce::SliderListener<juce::Slider>'
+  
+C:\Assignment oop 2\testtttttt\Assignment2\Source\PlayerGUI.h(8,32): error C2500: 'PlayerGUI': 'juce::Timer' is already a direct base class
+  (compiling source file '../../Source/MainComponent.cpp')
+      C:\JUCE\modules\juce_events\timers\juce_Timer.h(63,17):
+      see declaration of 'juce::Timer'
+  
+C:\Assignment oop 2\testtttttt\Assignment2\Source\PlayerGUI.h(57,10): error C2535: 'void PlayerGUI::timerCallback(void)': member function already defined or declared
+  (compiling source file '../../Source/MainComponent.cpp')
+      C:\Assignment oop 2\testtttttt\Assignment2\Source\PlayerGUI.h(25,10):
+      see declaration of 'PlayerGUI::timerCallback'
+  
+C:\Assignment oop 2\testtttttt\Assignment2\Source\PlayerGUI.h(10,5): error C2143: syntax error: missing ',' before 'public'
+  (compiling source file '../../Source/Main.cpp')
+  
+C:\Assignment oop 2\testtttttt\Assignment2\Source\PlayerGUI.h(6,40): error C2500: 'PlayerGUI': 'juce::Button::Listener' is already a direct base class
+  (compiling source file '../../Source/Main.cpp')
+      C:\JUCE\modules\juce_gui_basics\buttons\juce_Button.h(197,21):
+      see declaration of 'juce::Button::Listener'
+  
+C:\Assignment oop 2\testtttttt\Assignment2\Source\PlayerGUI.h(7,40): error C2500: 'PlayerGUI': 'juce::SliderListener<juce::Slider>' is already a direct base class
+  (compiling source file '../../Source/Main.cpp')
+      C:\JUCE\modules\juce_gui_basics\widgets\juce_Slider.h(49,17):
+      see declaration of 'juce::SliderListener<juce::Slider>'
+  
+C:\Assignment oop 2\testtttttt\Assignment2\Source\PlayerGUI.h(8,32): error C2500: 'PlayerGUI': 'juce::Timer' is already a direct base class
+  (compiling source file '../../Source/Main.cpp')
+      C:\JUCE\modules\juce_events\timers\juce_Timer.h(63,17):
+      see declaration of 'juce::Timer'
+  
+C:\Assignment oop 2\testtttttt\Assignment2\Source\PlayerGUI.h(57,10): error C2535: 'void PlayerGUI::timerCallback(void)': member function already defined or declared
+  (compiling source file '../../Source/Main.cpp')
+      C:\Assignment oop 2\testtttttt\Assignment2\Source\PlayerGUI.h(25,10):
+      see declaration of 'PlayerGUI::timerCallback'
+  
+C:\Assignment oop 2\testtttttt\Assignment2\Source\PlayerGUI.h(10,5): error C2143: syntax error: missing ',' before 'public'
+  (compiling source file '../../Source/PlayerGUI.cpp')
+  
+C:\Assignment oop 2\testtttttt\Assignment2\Source\PlayerGUI.h(6,40): error C2500: 'PlayerGUI': 'juce::Button::Listener' is already a direct base class
+  (compiling source file '../../Source/PlayerGUI.cpp')
+      C:\JUCE\modules\juce_gui_basics\buttons\juce_Button.h(197,21):
+      see declaration of 'juce::Button::Listener'
+  
+C:\Assignment oop 2\testtttttt\Assignment2\Source\PlayerGUI.h(7,40): error C2500: 'PlayerGUI': 'juce::SliderListener<juce::Slider>' is already a direct base class
+  (compiling source file '../../Source/PlayerGUI.cpp')
+      C:\JUCE\modules\juce_gui_basics\widgets\juce_Slider.h(49,17):
+      see declaration of 'juce::SliderListener<juce::Slider>'
+  
+C:\Assignment oop 2\testtttttt\Assignment2\Source\PlayerGUI.h(8,32): error C2500: 'PlayerGUI': 'juce::Timer' is already a direct base class
+  (compiling source file '../../Source/PlayerGUI.cpp')
+      C:\JUCE\modules\juce_events\timers\juce_Timer.h(63,17):
+      see declaration of 'juce::Timer'
+  
+C:\Assignment oop 2\testtttttt\Assignment2\Source\PlayerGUI.h(57,10): error C2535: 'void PlayerGUI::timerCallback(void)': member function already defined or declared
+  (compiling source file '../../Source/PlayerGUI.cpp')
+      C:\Assignment oop 2\testtttttt\Assignment2\Source\PlayerGUI.h(25,10):
+      see declaration of 'PlayerGUI::timerCallback'
+  
