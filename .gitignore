@@ -1,6 +1,8 @@
+# Ignore internal or build folders
+Assignment2.git/
 cmake-build-debug/
 .idea/
-*.exe
 *.pdb
-*.ilk
 *.obj
+*.ilk
+*.exe
