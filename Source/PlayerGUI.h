@@ -3,8 +3,9 @@
 #include "PlayerAudio.h"
 
 class PlayerGUI : public juce::Component,
-    public juce::Button::Listener,
-    public juce::Slider::Listener
+                  public juce::Button::Listener,
+                  public juce::Slider::Listener,
+                  public juce::Timer
 {
 public:
     PlayerGUI();
@@ -16,6 +17,7 @@ public:
     void getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToFill);
     void releaseResources();
     void paint(juce::Graphics& g) override;
+    void timerCallback() override;
 
 private:
     PlayerAudio playerAudio;
@@ -34,6 +36,9 @@ private:
     
     juce::Slider volumeSlider;
     juce::Slider speedSlider;
+    juce::Slider progressSlider;
+    juce::Label currentTimeLabel, totalTimeLabel;
+
 
 
     std::unique_ptr<juce::FileChooser> fileChooser;

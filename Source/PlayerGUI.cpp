@@ -21,6 +21,20 @@ PlayerGUI::PlayerGUI()
     speedSlider.addListener(this);
     addAndMakeVisible(speedSlider);
 
+
+    progressSlider.setRange(0.0, 1.0);
+    progressSlider.setSliderStyle(juce::Slider::LinearHorizontal);
+    progressSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 0, 0);
+    progressSlider.addListener(this);
+    addAndMakeVisible(progressSlider);
+
+    currentTimeLabel.setText("0:00", juce::dontSendNotification);
+    totalTimeLabel.setText("0:00", juce::dontSendNotification);
+    addAndMakeVisible(currentTimeLabel);
+    addAndMakeVisible(totalTimeLabel);
+    startTimerHz(20);
+
+
 }
 
 PlayerGUI::~PlayerGUI() {}
@@ -72,6 +86,10 @@ void PlayerGUI::resized()
     // ÇáÓáÇíÏÑ ÊÍÊ ÇáÃÒÑÇÑ
     volumeSlider.setBounds(40, y + 70, getWidth() - 80, 30);
     speedSlider.setBounds(40, y + 120, getWidth() - 80, 30);
+    progressSlider.setBounds(80, y + 200, getWidth() - 160, 20);
+    currentTimeLabel.setBounds(20, y + 200, 50, 20);
+    totalTimeLabel.setBounds(getWidth() - 70, y +200, 50, 20);
+
 
 }
 
@@ -147,6 +165,30 @@ void PlayerGUI::sliderValueChanged(juce::Slider* slider)
         playerAudio.setGain((float)slider->getValue());
     if (slider == &speedSlider) {
         playerAudio.setSpeed(slider->getValue());
+    }if (slider == &progressSlider && playerAudio.getLength() > 0){
+        double pos = progressSlider.getValue() * playerAudio.getLength();
+        playerAudio.setPosition(pos);
     }
 }
+
+void PlayerGUI::timerCallback(){
+    double position = playerAudio.getPosition();
+    double length = playerAudio.getLength();
+
+    if (length > 0.0)
+    {
+        progressSlider.setValue(position / length, juce::dontSendNotification);
+
+        auto formatTime = [](double seconds) {
+            int totalSecs = (int)seconds;
+            int mins = totalSecs / 60;
+            int secs = totalSecs % 60;
+            return juce::String::formatted("%d:%02d", mins, secs);
+        };
+
+        currentTimeLabel.setText(formatTime(position), juce::dontSendNotification);
+        totalTimeLabel.setText(formatTime(length), juce::dontSendNotification);
+    }
+}
+
 
