@@ -25,6 +25,9 @@ public:
     void toggleMute();
     void setLooping(bool shouldLoop);
     bool getLooping() const { return isLooping; }
+    void setSpeed(double speed);
+
+
 
 private:
     juce::AudioFormatManager formatManager;

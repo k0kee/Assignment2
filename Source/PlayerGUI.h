@@ -33,6 +33,8 @@ private:
 
     
     juce::Slider volumeSlider;
+    juce::Slider speedSlider;
+
 
     std::unique_ptr<juce::FileChooser> fileChooser;
 
