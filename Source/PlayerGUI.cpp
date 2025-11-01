@@ -15,6 +15,12 @@ PlayerGUI::PlayerGUI()
     volumeSlider.setValue(0.5);
     volumeSlider.addListener(this);
     addAndMakeVisible(volumeSlider);
+
+    speedSlider.setRange(0.5, 2.0, 0.1);
+    speedSlider.setValue(1.0);
+    speedSlider.addListener(this);
+    addAndMakeVisible(speedSlider);
+
 }
 
 PlayerGUI::~PlayerGUI() {}
@@ -65,6 +71,8 @@ void PlayerGUI::resized()
 
     // ÇáÓáÇíÏÑ ÊÍÊ ÇáÃÒÑÇÑ
     volumeSlider.setBounds(40, y + 70, getWidth() - 80, 30);
+    speedSlider.setBounds(40, y + 120, getWidth() - 80, 30);
+
 }
 
 void PlayerGUI::buttonClicked(juce::Button* button)
@@ -137,4 +145,8 @@ void PlayerGUI::sliderValueChanged(juce::Slider* slider)
 {
     if (slider == &volumeSlider)
         playerAudio.setGain((float)slider->getValue());
+    if (slider == &speedSlider) {
+        playerAudio.setSpeed(slider->getValue());
+    }
 }
+

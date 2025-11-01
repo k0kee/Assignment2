@@ -106,3 +106,16 @@ void PlayerAudio::setLooping(bool shouldLoop)
     if (readerSource.get())
         readerSource->setLooping(shouldLoop);
 }
+
+void PlayerAudio::setSpeed(double speed)
+{
+    if (readerSource){
+        bool wasPlaying = transportSource.isPlaying();
+        transportSource.stop();
+        transportSource.setSource(readerSource.get(), 0, nullptr,
+                                  readerSource->getAudioFormatReader()->sampleRate*speed);
+        if(wasPlaying)transportSource.start();
+    }
+}
+
+
