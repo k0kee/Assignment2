@@ -31,4 +31,3 @@ void MainComponent::resized()
 {
     player1.setBounds(getLocalBounds());
 }
-
