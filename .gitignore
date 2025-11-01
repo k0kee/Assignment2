@@ -10,3 +10,5 @@ cmake-build-debug/
 JuceLibraryCode/
 CMakeLists.txt
 *.jucer
+.vs/
+Builds/VisualStudio2022/.vs/
