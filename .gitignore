@@ -6,3 +6,7 @@ cmake-build-debug/
 *.obj
 *.ilk
 *.exe
+.idea/
+JuceLibraryCode/
+CMakeLists.txt
+*.jucer
