@@ -122,5 +122,23 @@ void PlayerAudio::setSpeed(double speed)
         if(wasPlaying)transportSource.start();
     }
 }
+void PlayerAudio::seekBy(double seconds){
+    double len = getLength();
+    if (len <= 0.0)
+        return;
+
+    double cur = transportSource.getCurrentPosition();
+    double target = cur + seconds;
+
+    if (target < 0.0) target = 0.0;
+    if (target > len)  target = len;
+
+    transportSource.setPosition(target);
+}
+
+bool PlayerAudio::isPlaying() const{
+    return transportSource.isPlaying();
+}
+
 
 

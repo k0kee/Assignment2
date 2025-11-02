@@ -2,12 +2,17 @@
 
 PlayerGUI::PlayerGUI()
 {
-    for (auto* btn : { &loadButton, &restartButton, &stopButton, &previousButton,
-                       &playButton, &pauseButton, &nextButton, &loopButton, &muteButton })
+    juce::TextButton* buttons[] = {
+        &loadButton, &restartButton, &stopButton, &previousButton,
+        &playButton, &pauseButton, &nextButton, &loopButton,
+        &muteButton, &skipBackButton, &skipForwardButton};
+
+    for (auto* btn : buttons)
     {
         btn->addListener(this);
         addAndMakeVisible(btn);
     }
+
 
     volumeSlider.setRange(0.0, 1.0, 0.01);
     volumeSlider.setValue(0.5);
@@ -81,6 +86,12 @@ void PlayerGUI::resized()
     speedSlider.setBounds(40, y + 120, getWidth() - 80, 30);
     positionSlider.setBounds(40, y + 170, getWidth() - 80, 20);
     positionLabel.setBounds(40, y + 200, getWidth() - 80, 30);
+
+    int centerX = getWidth() / 2;
+    skipBackButton.setBounds(centerX - 100 - 50, positionLabel.getY(), 80, 50);
+    skipForwardButton.setBounds(centerX + 70, positionLabel.getY(), 80, 50);
+
+
 }
 
 void PlayerGUI::buttonClicked(juce::Button* button)
@@ -152,6 +163,14 @@ void PlayerGUI::buttonClicked(juce::Button* button)
         playerAudio.toggleMute();
         muteButton.setButtonText(muteButton.getButtonText() == "Mute" ? "Unmute" : "Mute");
     }
+    if (button == &skipBackButton){
+        playerAudio.seekBy(-10.0);
+    }
+
+    if (button == &skipForwardButton){
+        playerAudio.seekBy(10.0);
+    }
+
 }
 
 void PlayerGUI::sliderValueChanged(juce::Slider* slider)

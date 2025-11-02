@@ -38,6 +38,9 @@ private:
     juce::TextButton nextButton{ "Next" };
     juce::TextButton loopButton{ "Loop" };
     juce::TextButton muteButton{ "Mute" };
+    juce::TextButton skipBackButton{ "<- 10s" };
+    juce::TextButton skipForwardButton{ "-> 10s" };
+
 
 
     juce::Slider volumeSlider;

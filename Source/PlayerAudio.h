@@ -31,6 +31,9 @@ public:
     double getCurrentPosition() const { return transportSource.getCurrentPosition(); }
     juce::AudioFormatManager& getFormatManager() { return formatManager; }
 
+    void seekBy(double seconds);
+    bool isPlaying() const;
+
 
 
 
