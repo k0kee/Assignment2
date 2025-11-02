@@ -28,7 +28,6 @@ PlayerGUI::PlayerGUI()
     addAndMakeVisible(positionLabel);
     positionLabel.setText("0:00 / 0:00", juce::dontSendNotification);
     positionLabel.setJustificationType(juce::Justification::centred);
-
     startTimer(100);
 }
 
