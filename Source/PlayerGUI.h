@@ -7,11 +7,13 @@ class PlayerGUI : public juce::Component,
     public juce::Slider::Listener,
     public juce::Timer
 
-
 {
 public:
     PlayerGUI();
     ~PlayerGUI() override;
+    void sliderValueChanged(juce::Slider* slider) override;
+    void buttonClicked(juce::Button* button) override;
+    void timerCallback() override;
 
     void resized() override;
 
@@ -20,10 +22,11 @@ public:
     void releaseResources();
     void paint(juce::Graphics& g) override;
 
+
 private:
     PlayerAudio playerAudio;
 
-    
+
     juce::TextButton loadButton{ "Load File" };
     juce::TextButton restartButton{ "Restart" };
     juce::TextButton stopButton{ "Stop" };
@@ -34,9 +37,10 @@ private:
     juce::TextButton loopButton{ "Loop" };
     juce::TextButton muteButton{ "Mute" };
 
-    
+
     juce::Slider volumeSlider;
     juce::Slider speedSlider;
+
     juce::Slider progressSlider;
     juce::Label currentTimeLabel, totalTimeLabel;
 
@@ -47,10 +51,7 @@ private:
 
     std::unique_ptr<juce::FileChooser> fileChooser;
 
-    
-    void buttonClicked(juce::Button* button) override;
-    void sliderValueChanged(juce::Slider* slider) override;
-    void timerCallback() override;
+
 
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PlayerGUI)
