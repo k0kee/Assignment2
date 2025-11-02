@@ -5,7 +5,8 @@
 class PlayerGUI : public juce::Component,
     public juce::Button::Listener,
     public juce::Slider::Listener,
-    public juce::Timer
+    public juce::Timer,
+    public juce::ChangeListener
 {
 public:
     PlayerGUI();
@@ -20,6 +21,8 @@ public:
     void getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToFill);
     void releaseResources();
     void paint(juce::Graphics& g) override;
+    void drawWaveform(juce::Graphics& g);
+    void changeListenerCallback(juce::ChangeBroadcaster*source) override;
 
 
 private:
@@ -41,6 +44,13 @@ private:
     juce::Slider speedSlider;
     juce::Slider positionSlider;
     juce::Label positionLabel;
+
+    juce::AudioThumbnailCache thumbnailCache{ 10 };
+    juce::AudioThumbnail thumbnail{ 512, playerAudio.getFormatManager(), thumbnailCache };
+
+    bool fileLoaded = false;
+    double lastPosition = 0.0;
+
 
 
 

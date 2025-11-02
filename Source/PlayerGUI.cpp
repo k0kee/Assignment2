@@ -31,7 +31,7 @@ PlayerGUI::PlayerGUI()
     startTimer(100);
 }
 
-PlayerGUI::~PlayerGUI() {}
+PlayerGUI::~PlayerGUI()=default;
 
 void PlayerGUI::prepareToPlay(int samplesPerBlockExpected, double sampleRate)
 {
@@ -50,7 +50,8 @@ void PlayerGUI::releaseResources()
 
 void PlayerGUI::paint(juce::Graphics& g)
 {
-    g.fillAll(juce::Colours::darkgrey);
+    g.fillAll(juce::Colours::lightseagreen);
+    drawWaveform(g);
 }
 
 void PlayerGUI::resized()
@@ -183,4 +184,36 @@ void PlayerGUI::timerCallback()
     juce::String timeText = juce::String::formatted("%d:%02d / %d:%02d",
         posMin, posSec, lenMin, lenSec);
     positionLabel.setText(timeText, juce::dontSendNotification);
+    repaint();
+
 }
+void PlayerGUI::drawWaveform(juce::Graphics& g)
+{
+    auto& thumbnail = playerAudio.getThumbnail();
+
+    if (thumbnail.getTotalLength() > 0.0)
+    {
+        g.setColour(juce::Colours::beige);
+        auto area = getLocalBounds().translated(0, 250);
+        thumbnail.drawChannels(g, area, 0.0, thumbnail.getTotalLength(), 1.0f);
+
+
+        double pos = playerAudio.getCurrentPosition();
+        double ratio = pos / thumbnail.getTotalLength();
+        int x = static_cast<int>(area.getX() + ratio *area.getWidth());
+
+        g.setColour(juce::Colours::darkblue);
+        g.drawLine((float)x, (float)area.getY(), (float)x, (float)area.getBottom(), 2.0f);
+    }
+    else
+    {
+        g.setColour(juce::Colours::white);
+        g.drawFittedText("No waveform loaded", getLocalBounds(), juce::Justification::centred, 1);
+    }
+}
+void PlayerGUI::changeListenerCallback(juce::ChangeBroadcaster* source)
+{
+    repaint();
+}
+
+

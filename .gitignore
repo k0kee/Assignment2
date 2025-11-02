@@ -12,3 +12,5 @@ CMakeLists.txt
 *.jucer
 .vs/
 Builds/VisualStudio2022/.vs/
+Assignment2/
+

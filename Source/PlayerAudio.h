@@ -27,12 +27,20 @@ public:
     bool getLooping() const { return isLooping; }
     void setSpeed(double speed);
 
+    juce::AudioThumbnail& getThumbnail() { return thumbnail; }
+    double getCurrentPosition() const { return transportSource.getCurrentPosition(); }
+    juce::AudioFormatManager& getFormatManager() { return formatManager; }
+
+
 
 
 private:
     juce::AudioFormatManager formatManager;
     std::unique_ptr<juce::AudioFormatReaderSource> readerSource;
     juce::AudioTransportSource transportSource;
+
+    juce::AudioThumbnailCache thumbnailCache{10};
+    juce::AudioThumbnail thumbnail{512, formatManager, thumbnailCache};
 
     float prev = 1.0f;   
     bool muted = false;        

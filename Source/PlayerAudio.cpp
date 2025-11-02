@@ -5,9 +5,8 @@ PlayerAudio::PlayerAudio()
     formatManager.registerBasicFormats();
 }
 
-PlayerAudio::~PlayerAudio()
-{
-}
+PlayerAudio::~PlayerAudio()=default;
+
 
 void PlayerAudio::prepareToPlay(int samplesPerBlockExpected, double sampleRate)
 {
@@ -48,11 +47,17 @@ bool PlayerAudio::loadFile(const juce::File& file)
                 nullptr,
                 reader->sampleRate);
 
+            thumbnail.clear();
+            thumbnail.setSource(new juce::FileInputSource(file));
+
             return true;
         }
     }
     return false;
 }
+
+
+
 
 void PlayerAudio::start()
 {
@@ -103,7 +108,7 @@ void PlayerAudio::toggleMute()
 void PlayerAudio::setLooping(bool shouldLoop)
 {
     isLooping = shouldLoop;
-    if (readerSource.get())
+    if (readerSource)
         readerSource->setLooping(shouldLoop);
 }
 
