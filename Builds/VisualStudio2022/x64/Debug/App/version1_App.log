@@ -1,6 +1,0 @@
-﻿  PlayerGUI.cpp
-  Main.cpp
-  MainComponent.cpp
-C:\Assignment oop 2\testtttttt\Assignment2\Source\Main.cpp(24,42): warning C4100: 'commandLine': unreferenced parameter
-C:\Assignment oop 2\testtttttt\Assignment2\Source\Main.cpp(46,54): warning C4100: 'commandLine': unreferenced parameter
-  version1_App.vcxproj -> C:\Assignment oop 2\testtttttt\Assignment2\Builds\VisualStudio2022\x64\Debug\App\version1.exe
