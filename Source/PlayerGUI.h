@@ -65,3 +65,4 @@ private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PlayerGUI)
 };
 // New feature added by Ahmed
+// New feature added by Ahmed
