@@ -22,7 +22,7 @@ public:
     void releaseResources();
     void paint(juce::Graphics& g) override;
     void drawWaveform(juce::Graphics& g);
-    void changeListenerCallback(juce::ChangeBroadcaster*source) override;
+    void changeListenerCallback(juce::ChangeBroadcaster* source) override;
     void saveSession();
     void loadSession();
 
@@ -31,6 +31,64 @@ public:
 private:
     PlayerAudio playerAudio;
 
+    
+    juce::String shortenText(const juce::String& text, int maxLength);
+
+   
+    juce::ListBox playlistBox;
+    std::vector<juce::File> playlistFiles;
+    int currentPlaylistIndex = -1;
+
+    juce::TextButton addToPlaylistButton{ "Add to Playlist" };
+    juce::TextButton removeFromPlaylistButton{ "Remove" };
+    juce::TextButton nextTrackButton{ "Next Track" };
+    juce::TextButton previousTrackButton{ "Prev Track" };
+
+    
+    class PlaylistModel : public juce::ListBoxModel
+    {
+    public:
+        PlaylistModel(PlayerGUI& owner) : owner(owner) {}
+
+        int getNumRows() override
+        {
+            return owner.playlistFiles.size();
+        }
+
+        void paintListBoxItem(int rowNumber, juce::Graphics& g, int width, int height, bool rowIsSelected) override
+        {
+            if (rowIsSelected)
+                g.fillAll(juce::Colours::lightblue);
+            else
+                g.fillAll(juce::Colours::white);
+
+            g.setColour(juce::Colours::black);
+            g.setFont(14.0f);
+
+            if (rowNumber < owner.playlistFiles.size())
+            {
+                juce::String displayText = juce::String(rowNumber + 1) + ". " + owner.playlistFiles[rowNumber].getFileName();
+                if (rowNumber == owner.currentPlaylistIndex)
+                    displayText = "? " + displayText;
+
+                g.drawText(displayText, 5, 0, width - 5, height, juce::Justification::centredLeft);
+            }
+        }
+
+        void listBoxItemClicked(int row, const juce::MouseEvent&) override
+        {
+            owner.loadPlaylistFile(row);
+        }
+
+    private:
+        PlayerGUI& owner;
+    };
+
+    std::unique_ptr<PlaylistModel> playlistModel;
+
+    void updatePlaylist();
+    void loadPlaylistFile(int index);
+    
 
     juce::TextButton loadButton{ "Load File" };
     juce::TextButton restartButton{ "Restart" };
@@ -59,7 +117,7 @@ private:
     juce::Label positionLabel;
     juce::Label ABloopLabel;
     juce::Label metadataLabel;
-    
+
 
 
     juce::AudioThumbnailCache thumbnailCache{ 10 };
@@ -77,4 +135,3 @@ private:
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PlayerGUI)
 };
-
