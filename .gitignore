@@ -7,3 +7,6 @@ bin/
 obj/
 *.exe
 *.dll
+cmake-build-debug/
+Assignment2/
+
