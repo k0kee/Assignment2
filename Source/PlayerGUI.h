@@ -23,6 +23,9 @@ public:
     void paint(juce::Graphics& g) override;
     void drawWaveform(juce::Graphics& g);
     void changeListenerCallback(juce::ChangeBroadcaster*source) override;
+    void saveSession();
+    void loadSession();
+
 
 
 private:
@@ -40,6 +43,10 @@ private:
     juce::TextButton muteButton{ "Mute" };
     juce::TextButton skipBackButton{ "<- 10s" };
     juce::TextButton skipForwardButton{ "-> 10s" };
+    juce::TextButton setAButton{ "Set A" };
+    juce::TextButton setBButton{ "Set B" };
+    juce::TextButton loopABButton{ "Loop A-B" };
+
 
 
 
@@ -47,12 +54,17 @@ private:
     juce::Slider speedSlider;
     juce::Slider positionSlider;
     juce::Label positionLabel;
+    juce::Label ABloopLabel;
 
     juce::AudioThumbnailCache thumbnailCache{ 10 };
     juce::AudioThumbnail thumbnail{ 512, playerAudio.getFormatManager(), thumbnailCache };
 
     bool fileLoaded = false;
     double lastPosition = 0.0;
+    double point_A = 0.0;
+    double point_B = 0.0;
+    bool loop_AB = false;
+
 
 
 
@@ -64,5 +76,4 @@ private:
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PlayerGUI)
 };
-// New feature added by Ahmed
-// New feature added by Ahmed
+

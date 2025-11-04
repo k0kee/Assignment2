@@ -5,13 +5,18 @@ PlayerGUI::PlayerGUI()
     juce::TextButton* buttons[] = {
         &loadButton, &restartButton, &stopButton, &previousButton,
         &playButton, &pauseButton, &nextButton, &loopButton,
-        &muteButton, &skipBackButton, &skipForwardButton};
+        &muteButton, &skipBackButton, &skipForwardButton, &setAButton, &setBButton, &loopABButton };
 
     for (auto* btn : buttons)
     {
         btn->addListener(this);
         addAndMakeVisible(btn);
     }
+    
+
+    addAndMakeVisible(ABloopLabel);
+    ABloopLabel.setText("A: 0.0  B: 0.0  Loop: OFF", juce::dontSendNotification);
+    ABloopLabel.setJustificationType(juce::Justification::centred);
 
 
     volumeSlider.setRange(0.0, 1.0, 0.01);
@@ -34,9 +39,15 @@ PlayerGUI::PlayerGUI()
     positionLabel.setText("0:00 / 0:00", juce::dontSendNotification);
     positionLabel.setJustificationType(juce::Justification::centred);
     startTimer(100);
+
+    loadSession();
 }
 
-PlayerGUI::~PlayerGUI()=default;
+PlayerGUI::~PlayerGUI()
+{
+    saveSession(); 
+}
+
 
 void PlayerGUI::prepareToPlay(int samplesPerBlockExpected, double sampleRate)
 {
@@ -86,6 +97,20 @@ void PlayerGUI::resized()
     speedSlider.setBounds(40, y + 120, getWidth() - 80, 30);
     positionSlider.setBounds(40, y + 170, getWidth() - 80, 20);
     positionLabel.setBounds(40, y + 200, getWidth() - 80, 30);
+    
+    
+    int abButtonWidth = 80;
+    int abButtonHeight = 40;
+    int abSpacing = 10;
+
+    
+    int abTotalWidth = (abButtonWidth * 3) + (abSpacing * 2);
+    int abStartX = (getWidth() - abTotalWidth) / 2;
+    int abY = y + buttonHeight + 220; 
+
+    setAButton.setBounds(abStartX, abY, abButtonWidth, abButtonHeight);
+    setBButton.setBounds(abStartX + abButtonWidth + abSpacing, abY, abButtonWidth, abButtonHeight);
+    loopABButton.setBounds(abStartX + (abButtonWidth + abSpacing) * 2, abY, abButtonWidth, abButtonHeight);
 
     int centerX = getWidth() / 2;
     skipBackButton.setBounds(centerX - 100 - 50, positionLabel.getY(), 80, 50);
@@ -170,6 +195,24 @@ void PlayerGUI::buttonClicked(juce::Button* button)
     if (button == &skipForwardButton){
         playerAudio.seekBy(10.0);
     }
+    if (button == &setAButton)
+    {
+        point_A = playerAudio.getPosition();
+        setAButton.setButtonText("A: " + juce::String(point_A, 1));
+    }
+
+    if (button == &setBButton)
+    {
+        point_B = playerAudio.getPosition();
+        setBButton.setButtonText("B: " + juce::String(point_B, 1));
+    }
+
+    if (button == &loopABButton)
+    {
+        loop_AB = !loop_AB;
+        loopABButton.setButtonText(loop_AB ? "Looping A-B" : "Loop A-B");
+    }
+
 
 }
 
@@ -205,6 +248,11 @@ void PlayerGUI::timerCallback()
     positionLabel.setText(timeText, juce::dontSendNotification);
     repaint();
 
+    if (loop_AB && point_B > point_A && playerAudio.getPosition() >= point_B)
+    {
+        playerAudio.setPosition(point_A);
+    }
+
 }
 void PlayerGUI::drawWaveform(juce::Graphics& g)
 {
@@ -213,9 +261,9 @@ void PlayerGUI::drawWaveform(juce::Graphics& g)
     if (thumbnail.getTotalLength() > 0.0)
     {
         g.setColour(juce::Colours::beige);
-        auto area = getLocalBounds().translated(0, 250);
-        thumbnail.drawChannels(g, area, 0.0, thumbnail.getTotalLength(), 1.0f);
-
+        auto area = getLocalBounds().reduced(40, 250);
+        area = area.translated(0, 200);
+        thumbnail.drawChannel(g, area, 0.0, thumbnail.getTotalLength(), 0, 1.0f);
 
         double pos = playerAudio.getCurrentPosition();
         double ratio = pos / thumbnail.getTotalLength();
@@ -234,7 +282,85 @@ void PlayerGUI::changeListenerCallback(juce::ChangeBroadcaster* source)
 {
     repaint();
 }
+void PlayerGUI::saveSession()
+{
+    juce::File sessionFile = juce::File::getSpecialLocation(juce::File::userDocumentsDirectory)
+        .getChildFile("last_session.txt");
 
+    if (playerAudio.getFile().existsAsFile())
+    {
+        lastPosition = playerAudio.getPosition();
 
-// New feature added by Ahmed
-// New feature added by Ahmed
+        juce::String content = playerAudio.getFile().getFullPathName()
+            + "\n" + juce::String(playerAudio.getPosition());
+
+        if (sessionFile.replaceWithText(content))
+            DBG("Saved session to: " + sessionFile.getFullPathName());
+        else
+            DBG("Failed to save session to: " + sessionFile.getFullPathName());
+    }
+    else
+    {
+        DBG("No current file to save for session.");
+    }
+        
+    
+}
+void PlayerGUI::loadSession()
+{
+    juce::File sessionFile = juce::File::getSpecialLocation(juce::File::userDocumentsDirectory)
+        .getChildFile("last_session.txt");
+
+    if (!sessionFile.existsAsFile())
+    {
+        DBG("No session file found at: " + sessionFile.getFullPathName());
+        return;
+    }
+
+    juce::StringArray lines;
+    sessionFile.readLines(lines);
+
+    if (lines.size() < 2)
+    {
+        DBG("Invalid session file (needs 2 lines)");
+        return;
+    }
+
+    juce::File lastFile(lines[0].trim());
+    double lastPosition = lines[1].trim().getDoubleValue();
+
+    if (!lastFile.existsAsFile())
+    {
+        DBG("Saved file not found: " + lastFile.getFullPathName());
+        return;
+    }
+
+    DBG("Trying to load last file: " + lastFile.getFullPathName());
+
+    if (playerAudio.loadFile(lastFile))
+    {
+        DBG("File loaded, waiting to restore position...");
+
+       
+        juce::Timer::callAfterDelay(1000, [this, lastPosition]()
+            {
+                double len = playerAudio.getLength();
+                DBG("File length detected: " + juce::String(len));
+                if (len > 0.0)
+                {
+                    playerAudio.setPosition(lastPosition);
+                    positionSlider.setRange(0.0, len, juce::dontSendNotification);
+                    positionSlider.setValue(lastPosition, juce::dontSendNotification);
+                    DBG("Restored last position: " + juce::String(lastPosition));
+                }
+                else
+                {
+                    DBG("File length still 0. Could not restore position.");
+                }
+            });
+    }
+    else
+    {
+        DBG("playerAudio.loadFile failed");
+    }
+}

@@ -41,6 +41,9 @@ bool PlayerAudio::loadFile(const juce::File& file)
             readerSource.reset();
 
             readerSource = std::make_unique<juce::AudioFormatReaderSource>(reader, true);
+            currentFile = file;
+
+
 
             transportSource.setSource(readerSource.get(),
                 0,
@@ -49,6 +52,7 @@ bool PlayerAudio::loadFile(const juce::File& file)
 
             thumbnail.clear();
             thumbnail.setSource(new juce::FileInputSource(file));
+
 
             return true;
         }
@@ -142,5 +146,4 @@ bool PlayerAudio::isPlaying() const{
 
 
 
-// New feature added by Ahmed
-// New feature added by Ahmed
+
