@@ -1,16 +1,9 @@
-# Ignore internal or build folders
-Assignment2.git/
-cmake-build-debug/
-.idea/
-*.pdb
-*.obj
-*.ilk
-*.exe
-.idea/
-JuceLibraryCode/
-CMakeLists.txt
-*.jucer
+Builds/
 .vs/
-Builds/VisualStudio2022/.vs/
-Assignment2/
-
+*.pdb
+*.ilk
+*.db
+bin/
+obj/
+*.exe
+*.dll

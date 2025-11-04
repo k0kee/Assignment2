@@ -236,3 +236,5 @@ void PlayerGUI::changeListenerCallback(juce::ChangeBroadcaster* source)
 }
 
 
+// New feature added by Ahmed
+// New feature added by Ahmed
