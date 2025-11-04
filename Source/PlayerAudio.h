@@ -30,6 +30,7 @@ public:
     juce::AudioThumbnail& getThumbnail() { return thumbnail; }
     double getCurrentPosition() const { return transportSource.getCurrentPosition(); }
     juce::AudioFormatManager& getFormatManager() { return formatManager; }
+    juce::File getFile() const { return currentFile; }
 
     void seekBy(double seconds);
     bool isPlaying() const;
@@ -44,6 +45,8 @@ private:
 
     juce::AudioThumbnailCache thumbnailCache{10};
     juce::AudioThumbnail thumbnail{512, formatManager, thumbnailCache};
+    juce::File currentFile;
+
 
     float prev = 1.0f;   
     bool muted = false;        
@@ -51,5 +54,3 @@ private:
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PlayerAudio)
 };
-// New feature added by Ahmed
-// New feature added by Ahmed
