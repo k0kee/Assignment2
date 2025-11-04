@@ -55,9 +55,12 @@ private:
     juce::Label volumeLabel;
     juce::Label speedLabel;
     juce::Slider positionSlider;
+    juce::Label remainingTimeLabel;
     juce::Label positionLabel;
     juce::Label ABloopLabel;
     juce::Label metadataLabel;
+    
+
 
     juce::AudioThumbnailCache thumbnailCache{ 10 };
     juce::AudioThumbnail thumbnail{ 512, playerAudio.getFormatManager(), thumbnailCache };

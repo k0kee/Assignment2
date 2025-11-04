@@ -48,6 +48,13 @@ PlayerGUI::PlayerGUI()
     positionLabel.setJustificationType(juce::Justification::centred);
     startTimer(100);
 
+    
+    addAndMakeVisible(remainingTimeLabel);
+    remainingTimeLabel.setText("Remaining: 0:00", juce::dontSendNotification);
+    remainingTimeLabel.setJustificationType(juce::Justification::centredRight);
+    remainingTimeLabel.setColour(juce::Label::textColourId, juce::Colours::white);
+
+
     loadSession();
 
     addAndMakeVisible(positionLabel);
@@ -58,6 +65,17 @@ PlayerGUI::PlayerGUI()
     metadataLabel.setColour(juce::Label::textColourId, juce::Colours::white);
     metadataLabel.setFont(juce::Font(14.0f, juce::Font::bold));
     metadataLabel.setText("No file loaded", juce::dontSendNotification);
+
+    volumeSlider.setColour(juce::Slider::trackColourId, juce::Colours::beige); 
+    volumeSlider.setColour(juce::Slider::thumbColourId, juce::Colours::brown); 
+
+    speedSlider.setColour(juce::Slider::trackColourId, juce::Colours::beige);
+    speedSlider.setColour(juce::Slider::thumbColourId, juce::Colours::brown);
+
+    positionSlider.setColour(juce::Slider::trackColourId, juce::Colours::beige);
+    positionSlider.setColour(juce::Slider::thumbColourId, juce::Colours::brown);
+
+    
 
 
 }
@@ -85,7 +103,7 @@ void PlayerGUI::releaseResources()
 
 void PlayerGUI::paint(juce::Graphics& g)
 {
-    g.fillAll(juce::Colours::lightseagreen);
+    g.fillAll(juce::Colours::darksalmon);
     drawWaveform(g);
 }
 
@@ -122,6 +140,16 @@ void PlayerGUI::resized()
     positionSlider.setBounds(40, y + 170, getWidth() - 80, 20);
     positionLabel.setBounds(40, y + 200, getWidth() - 80, 30);
 
+    
+    int labelY = positionLabel.getY();
+    int labelHeight = positionLabel.getHeight();
+    int labelWidth = 80;
+
+    
+    positionLabel.setBounds(40, labelY, labelWidth, labelHeight);
+    remainingTimeLabel.setBounds(getWidth() - labelWidth - 40, labelY, labelWidth, labelHeight);
+
+
 
     int abButtonWidth = 80;
     int abButtonHeight = 40;
@@ -140,7 +168,7 @@ void PlayerGUI::resized()
     skipBackButton.setBounds(centerX - 100 - 50, positionLabel.getY(), 80, 50);
     skipForwardButton.setBounds(centerX + 70, positionLabel.getY(), 80, 50);
 
-    metadataLabel.setBounds(30, y + 200, 200, 60);
+    metadataLabel.setBounds(30, y + 200, 200, 120);
 
 }
 
@@ -305,6 +333,7 @@ void PlayerGUI::timerCallback()
     if (len <= 0.0) return;
 
     double pos = playerAudio.getPosition();
+    
 
     positionSlider.setRange(0.0, len, juce::dontSendNotification);
     positionSlider.setValue(pos, juce::dontSendNotification);
@@ -313,11 +342,26 @@ void PlayerGUI::timerCallback()
     int posSec = (int)pos % 60;
     int lenMin = (int)(len / 60);
     int lenSec = (int)len % 60;
+    
 
     juce::String timeText = juce::String::formatted("%d:%02d / %d:%02d",
         posMin, posSec, lenMin, lenSec);
     positionLabel.setText(timeText, juce::dontSendNotification);
     repaint();
+
+    
+    
+
+   
+    double remaining = len - pos;
+    int remMin = (int)(remaining / 60);
+    int remSec = (int)remaining % 60;
+
+    juce::String remainingText = juce::String::formatted("-%d:%02d", remMin, remSec);
+    remainingTimeLabel.setText(remainingText, juce::dontSendNotification);
+
+
+
 
     if (loop_AB && point_B > point_A && playerAudio.getPosition() >= point_B)
     {
@@ -435,3 +479,4 @@ void PlayerGUI::loadSession()
         DBG("playerAudio.loadFile failed");
     }
 }
+
