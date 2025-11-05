@@ -93,10 +93,10 @@ private:
     juce::TextButton loadButton{ "Load File" };
     juce::TextButton restartButton{ "Restart" };
     juce::TextButton stopButton{ "Stop" };
-    juce::TextButton previousButton{ "Previous" };
+    juce::TextButton previousButton{ "<< previous" };
     juce::TextButton playButton{ "Play" };
-    juce::TextButton pauseButton{ "Pause" };
-    juce::TextButton nextButton{ "Next" };
+    juce::TextButton pauseButton{ "Pause || " };
+    juce::TextButton nextButton{ "Next >>" };
     juce::TextButton loopButton{ "Loop" };
     juce::TextButton muteButton{ "Mute" };
     juce::TextButton skipBackButton{ "<- 10s" };

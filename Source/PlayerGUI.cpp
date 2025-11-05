@@ -9,7 +9,6 @@ juce::String PlayerGUI::shortenText(const juce::String& text, int maxLength) {
 
 PlayerGUI::PlayerGUI()
 {
-    
     playlistModel = std::make_unique<PlaylistModel>(*this);
     playlistBox.setModel(playlistModel.get());
 
@@ -84,6 +83,7 @@ PlayerGUI::PlayerGUI()
     metadataLabel.setFont(juce::Font(14.0f, juce::Font::bold));
     metadataLabel.setText("No file loaded", juce::dontSendNotification);
 
+
     volumeSlider.setColour(juce::Slider::trackColourId, juce::Colours::beige);
     volumeSlider.setColour(juce::Slider::thumbColourId, juce::Colours::brown);
 
@@ -92,6 +92,8 @@ PlayerGUI::PlayerGUI()
 
     positionSlider.setColour(juce::Slider::trackColourId, juce::Colours::beige);
     positionSlider.setColour(juce::Slider::thumbColourId, juce::Colours::brown);
+
+    addAndMakeVisible(playlistBox);
 }
 
 PlayerGUI::~PlayerGUI()
@@ -297,6 +299,7 @@ void PlayerGUI::buttonClicked(juce::Button* button)
             int nextIndex = (currentPlaylistIndex + 1) % playlistFiles.size();
             loadPlaylistFile(nextIndex);
             playerAudio.start();
+            playlistBox.selectRow(currentPlaylistIndex );
         }
     }
 
@@ -307,6 +310,7 @@ void PlayerGUI::buttonClicked(juce::Button* button)
             int prevIndex = (currentPlaylistIndex - 1 + playlistFiles.size()) % playlistFiles.size();
             loadPlaylistFile(prevIndex);
             playerAudio.start();
+            playlistBox.selectRow(currentPlaylistIndex );
         }
     }
 
@@ -409,11 +413,25 @@ void PlayerGUI::buttonClicked(juce::Button* button)
     if (button == &previousButton)
     {
         playerAudio.setPosition(0.0);
+        if (!playlistFiles.empty())
+        {
+            int prevIndex = (currentPlaylistIndex - 1 + playlistFiles.size()) % playlistFiles.size();
+            loadPlaylistFile(prevIndex);
+            playerAudio.start();
+            playlistBox.selectRow(currentPlaylistIndex );
+        }
     }
 
     if (button == &nextButton)
     {
         playerAudio.setPosition(playerAudio.getLength());
+        if (!playlistFiles.empty())
+        {
+            int nextIndex = (currentPlaylistIndex + 1) % playlistFiles.size();
+            loadPlaylistFile(nextIndex);
+            playerAudio.start();
+            playlistBox.selectRow(currentPlaylistIndex );
+        }
     }
 
     if (button == &loopButton)
@@ -523,7 +541,7 @@ void PlayerGUI::drawWaveform(juce::Graphics& g)
         double ratio = pos / thumbnail.getTotalLength();
         int x = static_cast<int>(area.getX() + ratio * area.getWidth());
 
-        g.setColour(juce::Colours::darkblue);
+        g.setColour(juce::Colours::brown);
         g.drawLine((float)x, (float)area.getY(), (float)x, (float)area.getBottom(), 2.0f);
     }
     else
