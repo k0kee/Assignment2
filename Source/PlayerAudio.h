@@ -23,12 +23,14 @@ public:
 
     // Extra features
     void toggleMute();
+
     void setLooping(bool shouldLoop);
     bool getLooping() const { return isLooping; }
+
     void setSpeed(double speed);
 
-    juce::AudioThumbnail& getThumbnail() { return thumbnail; }
-    double getCurrentPosition() const { return transportSource.getCurrentPosition(); }
+    juce::AudioThumbnail& getThumbnail() { return thumbnail; } //btwadeha ll gui
+    double getCurrentPosition() const { return transportSource.getCurrentPosition();}
     juce::AudioFormatManager& getFormatManager() { return formatManager; }
     juce::File getFile() const { return currentFile; }
 
@@ -49,7 +51,9 @@ private:
 
 
     float prev = 1.0f;   
-    bool muted = false;        
+    bool muted = false;
+
+
     bool isLooping = false;    
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PlayerAudio)

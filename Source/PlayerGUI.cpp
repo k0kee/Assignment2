@@ -93,7 +93,7 @@ PlayerGUI::PlayerGUI()
     positionSlider.setColour(juce::Slider::trackColourId, juce::Colours::beige);
     positionSlider.setColour(juce::Slider::thumbColourId, juce::Colours::brown);
 
-    addAndMakeVisible(playlistBox);
+
 }
 
 PlayerGUI::~PlayerGUI()
@@ -501,12 +501,9 @@ void PlayerGUI::timerCallback()
     int lenSec = (int)len % 60;
 
 
-    juce::String timeText = juce::String::formatted("%d:%02d / %d:%02d",
-        posMin, posSec, lenMin, lenSec);
+    juce::String timeText = juce::String::formatted("%d:%02d / %d:%02d",posMin, posSec, lenMin, lenSec);
     positionLabel.setText(timeText, juce::dontSendNotification);
     repaint();
-
-
 
 
 
@@ -516,8 +513,6 @@ void PlayerGUI::timerCallback()
 
     juce::String remainingText = juce::String::formatted("-%d:%02d", remMin, remSec);
     remainingTimeLabel.setText(remainingText, juce::dontSendNotification);
-
-
 
 
     if (loop_AB && point_B > point_A && playerAudio.getPosition() >= point_B)
